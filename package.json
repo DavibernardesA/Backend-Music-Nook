@@ -16,12 +16,6 @@
     "lint": "eslint ./src/**/*.ts",
     "lint:fix": "eslint ./src/**/*.ts --fix"
   },
-  "lint-staged": {
-    "*.{js,ts}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -73,3 +67,4 @@
     "typescript-eslint": "^8.3.0"
   }
 }
+
