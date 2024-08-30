@@ -1,7 +1,7 @@
-import { it, describe, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
-describe('Example Test', () => {
-  it('should to be a test', () => {
+describe('Test user list.', () => {
+  it('should be a example', () => {
     const result = 2 + 2;
     expect(result).toBe(4);
   });

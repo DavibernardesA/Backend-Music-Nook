@@ -7,9 +7,9 @@
   },
   "scripts": {
     "dev": "nodemon --exec ts-node ./src/index.ts",
-    "migration:create": "typeorm-ts-node-commonjs migration:create ./src/application/infra/migrations/%npm_config_migration%",
-    "migration:run": "typeorm-ts-node-commonjs -d ./src/application/infra/data-source.ts migration:run",
-    "migration:revert": "typeorm-ts-node-commonjs -d ./src/application/infra/data-source.ts migration:revert",
+    "migration:create": "typeorm-ts-node-commonjs migration:create ./src/domain/infraestructure/migrations/%npm_config_migration%",
+    "migration:run": "typeorm-ts-node-commonjs -d ./src/domain/infraestructure/data-source.ts migration:run",
+    "migration:revert": "typeorm-ts-node-commonjs -d ./src/domain/infraestructure/data-source.ts migration:revert",
     "build": "rm -rf ./dist && tsc",
     "start": "node ./dist/index.js",
     "test": "vitest",
@@ -69,6 +69,7 @@
     "lint-staged": "^15.2.9",
     "nodemon": "^3.1.4",
     "prettier": "^3.3.3",
+    "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.3.0"
