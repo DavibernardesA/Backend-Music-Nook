@@ -4,7 +4,7 @@ import 'express-async-errors';
 import express, { Express } from 'express';
 import cors from 'cors';
 import { errorHandling } from './application/exceptions/ErrorHandling';
-import userRoutes from './routes/user.routes';
+import userResource from './adapters/resources/user';
 
 export class Server {
   public app: Express;
@@ -30,7 +30,7 @@ export class Server {
   }
 
   private routes() {
-    this.app.use('/user', userRoutes);
+    this.app.use('/user', userResource);
   }
 
   private errorHandling() {

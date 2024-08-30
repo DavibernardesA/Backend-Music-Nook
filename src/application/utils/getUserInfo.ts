@@ -46,14 +46,13 @@ export async function getUserInfoForTarget(userRepository: UserRepository, curre
  */
 export async function getAllUsersInfo(userRepository: UserRepository, currentUser: User): Promise<userInformationDTO[]> {
   const users = await userRepository.findAll();
-
   return users.map(u => {
-    if (u.is_private && !currentUser.following.some(followedUser => followedUser.id === u.id)) {
-      // Return minimal information if the user is private and not followed
+    const isFollowed = currentUser.following?.some(followedUser => followedUser.id === u.id) ?? false;
+
+    if (u.is_private && !isFollowed) {
       return new userInformationDTO(u.id, u.username, u.bio, u.avatar, u.followers_count, u.following_count, u.music_interests);
     }
 
-    // Return full information if the user is public or followed
     return new userInformationDTO(u.id, u.username, u.bio, u.avatar, u.followers_count, u.following_count, u.music_interests, u.social_links);
   });
 }

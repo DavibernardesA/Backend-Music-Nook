@@ -10,7 +10,6 @@ export class UserList {
 
   async handler(userId: string, targetUserId?: string) {
     const user = await this.userRepository.findById(userId);
-
     if (targetUserId) {
       return getUserInfoForTarget(this.userRepository, user, targetUserId);
     }
