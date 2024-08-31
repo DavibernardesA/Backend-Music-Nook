@@ -1,4 +1,5 @@
 import { UserRepository } from '../../domain/core/repositories/userRepository';
+import { usernameTakenError } from '../exceptions/usernameTakenError';
 
 export class UsernameGenerator {
   private userRepository: UserRepository;
@@ -18,7 +19,7 @@ export class UsernameGenerator {
       }
     }
 
-    throw new Error('All possible usernames for this base name are taken. Please try a different name.');
+    throw new usernameTakenError('All possible usernames for this base name are taken. Please try a different name.');
   }
 
   private getRandomNumber(): number {

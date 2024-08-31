@@ -2,6 +2,7 @@ import { Repository } from 'typeorm';
 import { userRepositoryInterface } from '../ports/repositories/userRepositoryInterface';
 import { User } from '../models/user';
 import { AppDataSource } from '../../infraestructure/data-source';
+import { UserNotFoundException } from '../../../application/exceptions/users/UserNotFoundException';
 
 export class UserRepository implements userRepositoryInterface {
   private repository: Repository<User>;
@@ -12,7 +13,7 @@ export class UserRepository implements userRepositoryInterface {
   async findAll(): Promise<User[]> {
     const users = await this.repository.find();
     if (!users) {
-      throw new Error('User not found.');
+      throw new UserNotFoundException('User not found.');
     }
     return users;
   }
@@ -20,7 +21,7 @@ export class UserRepository implements userRepositoryInterface {
   async findById(id: string, relations: string[] = []): Promise<User> {
     const user = await this.repository.findOne({ where: { id }, relations });
     if (!user) {
-      throw new Error('User not found.');
+      throw new UserNotFoundException('User not found.');
     }
     return user;
   }
@@ -28,7 +29,7 @@ export class UserRepository implements userRepositoryInterface {
   async findByUsername(username: string): Promise<User> {
     const user = await this.repository.findOneBy({ username });
     if (!user) {
-      throw new Error('User not found.');
+      throw new UserNotFoundException('User not found.');
     }
 
     return user;

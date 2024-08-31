@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import { UserList } from '../../application/users/userList';
 import { UserRepository } from '../../domain/core/repositories/userRepository';
 import { User } from '../../domain/core/models/user';
-import { UserMustBeLoggedInException } from '../../application/exceptions/users/userMustBeLoggedInException';
+import { UserMustBeLoggedInException } from '../../application/exceptions/users/UserMustBeLoggedInException';
 
 class UserResource {
   public router: Router;
