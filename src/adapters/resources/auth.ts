@@ -2,6 +2,8 @@ import { Router, Request, Response } from 'express';
 import { Login } from '../../application/auth/login';
 import { UserRepository } from '../../domain/core/repositories/userRepository';
 import { env } from '../../application/config/env/env';
+import { transformData } from '../validation/transformData';
+import { loginSchema } from '../validation/auth/loginSchema';
 
 class authResource {
   public router: Router;
@@ -16,6 +18,8 @@ class authResource {
 
   private async login(req: Request, res: Response) {
     const { email, password } = req.body;
+
+    transformData(loginSchema, { email, password });
 
     const token = await new Login(new UserRepository()).handler(email, password);
 
