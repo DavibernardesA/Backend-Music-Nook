@@ -3,6 +3,12 @@ import { UserList } from '../../application/users/userList';
 import { UserRepository } from '../../domain/core/repositories/userRepository';
 import { User } from '../../domain/core/models/user';
 import { UserMustBeLoggedInException } from '../../application/exceptions/users/UserMustBeLoggedInException';
+import { UserCreate } from '../../application/users/userCreate';
+import { EmailValidator } from '../../application/utils/ensureEmailIsUnique';
+import { BcryptService } from '../../application/utils/bcrypt';
+import { UserCreator } from '../../application/utils/userUtils';
+import { ImageModerationService } from '../../application/utils/imageModerationService';
+import { env } from '../../application/config/env/env';
 
 class UserResource {
   public router: Router;
@@ -23,6 +29,16 @@ class UserResource {
     const users = await new UserList(new UserRepository()).handler(req.user.id, req.params.id);
 
     return res.status(200).json(users);
+  }
+
+  async createUser(req: Request, res: Response) {
+    const newUser = await new UserCreate(
+      new EmailValidator(),
+      new BcryptService(),
+      new UserCreator(new UserRepository(), new ImageModerationService(env.BUCKET_NAME))
+    ).handler(req.body);
+
+    return res.status(201).json(newUser);
   }
 }
 

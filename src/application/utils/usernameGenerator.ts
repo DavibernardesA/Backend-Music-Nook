@@ -1,5 +1,5 @@
 import { UserRepository } from '../../domain/core/repositories/userRepository';
-import { usernameTakenError } from '../exceptions/usernameTakenError';
+import { usernameTakenError } from '../exceptions/users/usernameTakenError';
 
 export class UsernameGenerator {
   private userRepository: UserRepository;

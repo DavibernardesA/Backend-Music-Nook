@@ -13,6 +13,7 @@ describe('UserList', () => {
   beforeEach(() => {
     userRepositoryMock = {
       findAll: jest.fn(),
+      findByEmail: jest.fn(),
       findById: jest.fn(),
       findByUsername: jest.fn(),
       create: jest.fn()
@@ -47,9 +48,9 @@ describe('UserList', () => {
   });
 
   it('should return a list of users if no target user is specified', async () => {
-    const mockUser1 = await createUser('@user1', 'user1', [], []);
-    const mockUser2 = await createUser('@user2', 'user2', [], []);
-    const mockUser3 = await createUser('@user3', 'user3', [], [], true); //private user
+    const mockUser1 = await createUser('@user_1111', 'user1', [], []);
+    const mockUser2 = await createUser('@user_2222', 'user2', [], []);
+    const mockUser3 = await createUser('@user_3333', 'user3', [], [], true); //private user
 
     userRepositoryMock.findAll.mockResolvedValue([mockUser1, mockUser2, mockUser3]);
     userRepositoryMock.findById.mockResolvedValue(mockUser1);
