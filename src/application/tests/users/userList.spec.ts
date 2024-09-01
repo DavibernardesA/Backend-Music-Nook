@@ -16,7 +16,8 @@ describe('UserList', () => {
       findByEmail: jest.fn(),
       findById: jest.fn(),
       findByUsername: jest.fn(),
-      create: jest.fn()
+      create: jest.fn(),
+      isFollowing: jest.fn()
     } as unknown as jest.Mocked<UserRepository>;
 
     userList = new UserList(userRepositoryMock);

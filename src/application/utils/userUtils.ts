@@ -25,7 +25,7 @@ export class UserCreator {
     const username = await this.generateUniqueUsername(body.username);
     const avatarUrl = file ? await this.imageModerationService.handleFileUpload(file, username) : undefined;
 
-    const newUser = this.buildUserEntity(body, username, encryptedPassword, avatarUrl);
+    const newUser = await this.userRepository.create(this.buildUserEntity(body, username, encryptedPassword, avatarUrl));
     return this.buildUserInformationDTO(newUser);
   }
 

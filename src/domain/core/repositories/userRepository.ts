@@ -32,16 +32,24 @@ export class UserRepository implements userRepositoryInterface {
     return user;
   }
 
-  async findByUsername(username: string): Promise<User> {
+  async findByUsername(username: string): Promise<User | null> {
     const user = await this.repository.findOneBy({ username });
-    if (!user) {
-      throw new UserNotFoundException('User not found.');
-    }
 
     return user;
   }
 
   async create(user: User): Promise<User> {
     return await this.repository.save(user);
+  }
+
+  async isFollowing(currentUserId: string, targetUserId: string): Promise<boolean> {
+    const result = await this.repository
+      .createQueryBuilder('user')
+      .innerJoin('user.following', 'following')
+      .where('user.id = :currentUserId', { currentUserId })
+      .andWhere('following.id = :targetUserId', { targetUserId })
+      .getCount();
+
+    return result > 0;
   }
 }

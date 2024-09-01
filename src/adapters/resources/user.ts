@@ -9,6 +9,8 @@ import { BcryptService } from '../../application/utils/bcrypt';
 import { UserCreator } from '../../application/utils/userUtils';
 import { ImageModerationService } from '../../application/utils/imageModerationService';
 import { env } from '../../application/config/env/env';
+import multer from '../middlewares/multer';
+import { authenticate } from '../middlewares/authenticate';
 
 class UserResource {
   public router: Router;
@@ -18,7 +20,8 @@ class UserResource {
   }
 
   private initRoutes() {
-    this.router.get('/:id?', this.getUsers);
+    this.router.get('/:id?', authenticate, this.getUsers);
+    this.router.post('/', multer.single('avatar'), this.createUser);
   }
 
   async getUsers(req: Request, res: Response): Promise<Response<User | User[]>> {

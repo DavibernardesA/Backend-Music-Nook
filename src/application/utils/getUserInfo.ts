@@ -1,6 +1,7 @@
 import { userInformationDTO } from '../../domain/core/models/dtos/userInformation';
-import { User } from '../../domain/core/models/user';
 import { UserRepository } from '../../domain/core/repositories/userRepository';
+import { User } from '../../domain/core/models/user';
+import { UserMinimumInformationDTO } from '../../domain/core/models/dtos/userMinimumInformationDTO';
 
 /**
  * Gets information for a specific target user based on privacy settings.
@@ -9,12 +10,17 @@ import { UserRepository } from '../../domain/core/repositories/userRepository';
  * @param targetUserId - The ID of the target user.
  * @returns - The appropriate user DTO based on privacy settings.
  */
-export async function getUserInfoForTarget(userRepository: UserRepository, currentUser: User, targetUserId: string): Promise<userInformationDTO> {
+export async function getUserInfoForTarget(
+  userRepository: UserRepository,
+  currentUser: User,
+  targetUserId: string
+): Promise<userInformationDTO | UserMinimumInformationDTO> {
   const targetUser = await userRepository.findById(targetUserId);
+  const isFollowing = await userRepository.isFollowing(currentUser.id, targetUserId);
 
-  if (targetUser.is_private && !currentUser.following.some(followedUser => followedUser.id === targetUser.id)) {
+  if (targetUser.is_private && !isFollowing) {
     // Return minimal information if the user is private and not followed
-    return new userInformationDTO(
+    return new UserMinimumInformationDTO(
       targetUser.id,
       targetUser.username,
       targetUser.bio,
@@ -44,15 +50,21 @@ export async function getUserInfoForTarget(userRepository: UserRepository, curre
  * @param currentUser - The currently logged-in user.
  * @returns - An array of user DTOs.
  */
-export async function getAllUsersInfo(userRepository: UserRepository, currentUser: User): Promise<userInformationDTO[]> {
+export async function getAllUsersInfo(
+  userRepository: UserRepository,
+  currentUser: User
+): Promise<(userInformationDTO | UserMinimumInformationDTO)[]> {
   const users = await userRepository.findAll();
-  return users.map(u => {
-    const isFollowed = currentUser.following?.some(followedUser => followedUser.id === u.id) ?? false;
 
-    if (u.is_private && !isFollowed) {
-      return new userInformationDTO(u.id, u.username, u.bio, u.avatar, u.followers_count, u.following_count, u.music_interests);
-    }
+  return await Promise.all(
+    users.map(async u => {
+      const isFollowing = await userRepository.isFollowing(currentUser.id, u.id);
 
-    return new userInformationDTO(u.id, u.username, u.bio, u.avatar, u.followers_count, u.following_count, u.music_interests, u.social_links);
-  });
+      if (u.is_private && !isFollowing) {
+        return new UserMinimumInformationDTO(u.id, u.username, u.bio, u.avatar, u.followers_count, u.following_count, u.music_interests);
+      }
+
+      return new userInformationDTO(u.id, u.username, u.bio, u.avatar, u.followers_count, u.following_count, u.music_interests, u.social_links);
+    })
+  );
 }

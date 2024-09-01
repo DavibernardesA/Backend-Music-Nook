@@ -12,7 +12,6 @@ export class UserCreate {
 
   public async handler(body: User, file?: Express.Multer.File) {
     await this.emailValidator.ensureEmailIsUnique(body.email);
-
     const encryptedPassword = await this.bcryptService.encrypt(body.password);
 
     return await this.userCreator.createUser(body, encryptedPassword, file);
