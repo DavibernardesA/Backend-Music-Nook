@@ -14,6 +14,7 @@ class authResource {
 
   private initRoutes() {
     this.router.post('/login', this.login.bind(this));
+    this.router.post('/logout', this.logout.bind(this));
   }
 
   private async login(req: Request, res: Response) {
@@ -31,6 +32,10 @@ class authResource {
       })
       .status(204)
       .json();
+  }
+
+  private async logout(_: Request, res: Response) {
+    return res.clearCookie('authToken');
   }
 }
 
