@@ -14,7 +14,7 @@ export class Login {
     this.bcryptService = new BcryptService();
   }
 
-  async handler(email: string, password: string) {
+  async handler(email: string, password: string): Promise<string> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (!existingUser) {
       throw new BadRequestException('Bad request, please check provided data.');

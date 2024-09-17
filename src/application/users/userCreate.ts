@@ -2,6 +2,7 @@ import { User } from '../../domain/core/models/user';
 import { EmailValidator } from '../utils/ensureEmailIsUnique';
 import { BcryptService } from '../utils/bcrypt';
 import { UserCreator } from '../utils/userUtils';
+import { userInformationDTO } from '../../domain/core/models/dtos/userInformation';
 
 export class UserCreate {
   constructor(
@@ -10,7 +11,7 @@ export class UserCreate {
     private userCreator: UserCreator
   ) {}
 
-  public async handler(body: User, file?: Express.Multer.File) {
+  public async handler(body: User, file?: Express.Multer.File): Promise<userInformationDTO> {
     await this.emailValidator.ensureEmailIsUnique(body.email);
     const encryptedPassword = await this.bcryptService.encrypt(body.password);
 
